@@ -27,7 +27,8 @@ Mix_Chunk *bulletSound = NULL;
 SDL_Rect playerSlice[8];
 
 Player playerObject;
-std::vector<Bullet*> bulletObjects;
+std::vector<BaseProjectile*> bulletObjects;
+std::vector<SDL_Rect> obstacles;
 
 bool init()
 {
@@ -141,12 +142,24 @@ bool load_files()
 	Point temp((playerSize/2),(playerSize/2));
 	Point temp2(map->w,map->h);
 	
-	playerObject.init(temp,playerSize,0,temp2);
+	playerObject.init(temp,playerSize,0,temp2,&obstacles,2);
 
 	if(bulletSound==NULL)
 	{
 		return false;
 	}
+	
+	/*SDL_Rect test;
+	test.x=100;
+	test.y=100;
+	test.w=500;
+	test.h=100;
+	obstacles.push_back(test);
+	test.x=100;
+	test.y=100;
+	test.w=100;
+	test.h=500;
+	obstacles.push_back(test);*/
 	
 	return true;
 }
@@ -156,7 +169,7 @@ void cleanup()
 	SDL_FreeSurface(map);
 	SDL_FreeSurface(player);
 	
-	for(std::vector<Bullet*>::iterator it=bulletObjects.begin();it!=bulletObjects.end();)
+	for(std::vector<BaseProjectile*>::iterator it=bulletObjects.begin();it!=bulletObjects.end();)
 	{
 		delete *it;
 		bulletObjects.erase(it);
@@ -255,7 +268,7 @@ int main(int argc, char* args[])
 			{
 				shootTimer=SDL_GetTicks();
 				Point temp(map->w,map->h);
-				bulletObjects.push_back(new Bullet(playerObject,0,temp,bullet->w));
+				bulletObjects.push_back(new BaseProjectile(playerObject,0,temp,bullet->w,0,&obstacles,4));
 				if(Mix_PlayChannel(-1,bulletSound,0)==-1)
 				{
 					return 1;
@@ -271,7 +284,7 @@ int main(int argc, char* args[])
 		
 		apply_surface(((SCREEN_WIDTH/2)-((playerObject.getPosition()).getX())),((SCREEN_HEIGHT/2)-((playerObject.getPosition()).getY())),map,screen);
 		
-		for(std::vector<Bullet*>::iterator it=bulletObjects.begin();it!=bulletObjects.end();it++)
+		for(std::vector<BaseProjectile*>::iterator it=bulletObjects.begin();it!=bulletObjects.end();it++)
 		{
 			apply_surface((((SCREEN_WIDTH/2)-((playerObject.getPosition().getX())-((*(*it)).getPosition().getX())))-((*(*it)).getSize()/2)),(((SCREEN_HEIGHT/2)-((playerObject.getPosition().getY())-((*(*it)).getPosition().getY())))-((*(*it)).getSize()/2)),bullet,screen);
 			if((*(*it)).hitScan()==true)

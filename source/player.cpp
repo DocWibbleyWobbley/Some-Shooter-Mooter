@@ -1,188 +1,229 @@
-#include "point.h"
 #include "entities.h"
 
-int Player::checkDirection(int dir) const {
+void Player::checkDirection(int dir, int *xVel, int *yVel) const
+{
 	int x=origin_.getX();
 	int y=origin_.getY();
-	switch(dir) {
+	switch(dir)
+	{
 		case 0:
-			if(y==(size_/2)) {
-				return 12;
+			*xVel=0;
+			*yVel=-speed_;
+			if((y+*yVel)<(size_/2))
+			{
+				*yVel=(size_/2)-y;
 			}
-			else if(y==(size_/2)+1) {
-				return 8;
+			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
+			{
+				if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x)&&(y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+				{
+					*yVel=((*it).y+(*it).h+(size_/2))-y;
+				}
 			}
-			else return 0;
 			break;
 		case 1:
-			if((y==(size_/2))&&(x!=(map_.getX()-(size_/2)))) {
-				return 9;
+			*xVel=speed_/2;
+			*yVel=-speed_/2;
+			if((y+*yVel)<(size_/2))
+			{
+				*yVel=(size_/2)-y;
 			}
-			else if((y==(size_/2))&&(x==(map_.getX()-(size_/2)))) {
-				return 13;
+			if((x+*xVel)>(map_.getX()-(size_/2)))
+			{
+				*xVel=(map_.getX()-(size_/2))-x;
 			}
-			else if((y!=(size_/2))&&(x==(map_.getX()-(size_/2)))) {
-				return 8;
+			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
+			{
+				if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x)&&(y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+				{
+					if(y-(size_/2)!=(*it).y+(*it).h)
+					{
+						if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x))
+						{
+							*xVel=((*it).x-(size_/2))-x;
+						}
+					}
+					else if(x+(size_/2)!=(*it).x)
+					{
+						if((y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+						{
+							*yVel=((*it).y+(*it).h+(size_/2))-y;
+						}
+					}
+				}
 			}
-			else return 1;
 			break;
 		case 2:
-			if(x==(map_.getX()-(size_/2))) {
-				return 14;
+			*xVel=speed_;
+			*yVel=0;
+			if((x+*xVel)>(map_.getX()-(size_/2)))
+			{
+				*xVel=(map_.getX()-(size_/2))-x;
 			}
-			else if(x==(map_.getX()-((size_/2)+1))) {
-				return 9;
-			}
-			else {
-				return 2;
+			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
+			{
+				if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x)&&(y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+				{
+					*xVel=((*it).x-(size_/2))-x;
+				}
 			}
 			break;
 		case 3:
-			if((y==(map_.getY()-(size_/2)))&&(x!=(map_.getX()-(size_/2)))) {
-				return 9;
+			*xVel=speed_/2;
+			*yVel=speed_/2;
+			if((y+*yVel)>(map_.getY()-(size_/2)))
+			{
+				*yVel=(map_.getY()-(size_/2))-y;
 			}
-			else if((y==(map_.getY()-(size_/2)))&&(x==(map_.getX()-(size_/2)))) {
-				return 15;
+			if((x+*xVel)>(map_.getX()-(size_/2)))
+			{
+				*xVel=(map_.getX()-(size_/2))-x;
 			}
-			else if((y!=(map_.getY()-(size_/2)))&&(x==(map_.getX()-(size_/2)))) {
-				return 10;
+			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
+			{
+				if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x)&&(y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+				{
+					if(y+(size_/2)!=(*it).y)
+					{
+						if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x))
+						{
+							*xVel=((*it).x-(size_/2))-x;
+						}
+					}
+					else if(x+(size_/2)!=(*it).x)
+					{
+						if((y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+						{
+							*yVel=((*it).y-(size_/2))-y;
+						}
+					}
+				}
 			}
-			else return 3;
 			break;
 		case 4:
-			if(y==(map_.getY()-(size_/2))) {
-				return 16;
+			*xVel=0;
+			*yVel=speed_;
+			if((y+*yVel)>(map_.getY()-(size_/2)))
+			{
+				*yVel=(map_.getY()-(size_/2))-y;
 			}
-			else if(y==(map_.getX()-((size_/2)+1))) {
-				return 10;
+			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
+			{
+				if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x)&&(y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+				{
+					*yVel=((*it).y-(size_/2))-y;
+				}
 			}
-			else return 4;
 			break;
 		case 5:
-			if((y==(map_.getY()-(size_/2)))&&(x!=(size_/2))) {
-				return 11;
+			*xVel=-speed_/2;
+			*yVel=speed_/2;
+			if((x+*xVel)<(size_/2))
+			{
+				*xVel=(size_/2)-x;
 			}
-			else if((y==(map_.getY()-(size_/2)))&&(x==(size_/2))) {
-				return 17;
+			if((y+*yVel)>(map_.getY()-(size_/2)))
+			{
+				*yVel=(map_.getY()-(size_/2))-y;
 			}
-			else if((y!=(map_.getY()-(size_/2)))&&(x==(size_/2))) {
-				return 10;
+			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
+			{
+				if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x)&&(y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+				{
+					if(y+(size_/2)!=(*it).y)
+					{
+						if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x))
+						{
+							*xVel=((*it).x+(*it).w+(size_/2))-x;
+						}
+					}
+					else if(x-(size_/2)!=(*it).x+(*it).w)
+					{
+						if((y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+						{
+							*yVel=((*it).y-(size_/2))-y;
+						}
+					}
+				}
 			}
-			else return 5;
 			break;
 		case 6:
-			if(x==(size_/2)) {
-				return 18;
+			*xVel=-speed_;
+			*yVel=0;
+			if((x+*xVel)<(size_/2))
+			{
+				*xVel=(size_/2)-x;
 			}
-			else if(x==((size_/2)+1)) {
-				return 11;
-			}
-			else {
-				return 6;
+			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
+			{
+				if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x)&&(y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+				{
+					*xVel=((*it).x+(*it).w+(size_/2))-x;
+				}
 			}
 			break;
 		case 7:
-			if((y==(size_/2))&&(x!=(size_/2))) {
-				return 11;
+			*xVel=-speed_/2;
+			*yVel=-speed_/2;
+			if((x+*xVel)<(size_/2))
+			{
+				*xVel=(size_/2)-x;
 			}
-			else if((y==(size_/2))&&(x==(size_/2))) {
-				return 19;
+			if((y+*yVel)<(size_/2))
+			{
+				*yVel=(size_/2)-y;
 			}
-			else if((y!=(size_/2))&&(x==(size_/2))) {
-				return 8;
+			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
+			{
+				if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x)&&(y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+				{
+					if(y-(size_/2)!=(*it).y+(*it).h)
+					{
+						if((x+*xVel-(size_/2)<(*it).x+(*it).w)&&(x+*xVel+(size_/2)>(*it).x))
+						{
+							*xVel=((*it).x+(*it).w+(size_/2))-x;
+						}
+					}
+					else if(x-(size_/2)!=(*it).x+(*it).w)
+					{
+						if((y+*yVel-(size_/2)<(*it).y+(*it).h)&&(y+*yVel+(size_/2)>(*it).y))
+						{
+							*yVel=((*it).y+(*it).h+(size_/2))-y;
+						}
+					}
+				}
 			}
-			else return 7;
 			break;
 	}
 }
-
-Point Player::getPosition() const {
+Point Player::getPosition() const
+{
 	return origin_;
 }
 
-void Player::movePlayer(int dir) {
-	direction_=checkDirection(dir);
-	switch(direction_) {
-		case 0:
-			origin_.setY(origin_.getY()-2);
-			break;
-		case 1:
-			origin_.setX(origin_.getX()+1);
-			origin_.setY(origin_.getY()-1);
-			break;
-		case 2:
-			origin_.setX(origin_.getX()+2);
-			break;
-		case 3:
-			origin_.setX(origin_.getX()+1);
-			origin_.setY(origin_.getY()+1);
-			break;
-		case 4:
-			origin_.setY(origin_.getY()+2);
-			break;
-		case 5:
-			origin_.setX(origin_.getX()-1);
-			origin_.setY(origin_.getY()+1);
-			break;
-		case 6:
-			origin_.setX(origin_.getX()-2);
-			break;
-		case 7:
-			origin_.setX(origin_.getX()-1);
-			origin_.setY(origin_.getY()-1);
-			break;
-		case 8:
-			direction_=0;
-			origin_.setY(origin_.getY()-1);
-			break;
-		case 9:
-			direction_=2;
-			origin_.setX(origin_.getX()+1);
-			break;
-		case 10:
-			direction_=4;
-			origin_.setY(origin_.getY()+1);
-			break;
-		case 11:
-			direction_=6;
-			origin_.setX(origin_.getX()-1);
-			break;
-		case 12:
-			direction_=0;
-			break;
-		case 13:
-			direction_=1;
-			break;
-		case 14:
-			direction_=2;
-			break;
-		case 15:
-			direction_=3;
-			break;
-		case 16:
-			direction_=4;
-			break;
-		case 17:
-			direction_=5;
-			break;
-		case 18:
-			direction_=6;
-			break;
-		case 19:
-			direction_=7;
-			break;
-	}
+void Player::movePlayer(int dir)
+{
+	int xVel;
+	int yVel;
+	direction_=dir;
+	checkDirection(direction_,&xVel,&yVel);
+	origin_.setX(origin_.getX()+xVel);
+	origin_.setY(origin_.getY()+yVel);
 }
 	
-int Player::getDirection() const {
+int Player::getDirection() const
+{
 	return direction_;
 }
 
-void Player::init(Point origin, int size, int dir, Point map) {
+void Player::init(Point origin, int size, int dir, Point map, std::vector<SDL_Rect> *obstacles, int speed)
+{
 	origin_.setX(origin.getX());
 	origin_.setY(origin.getY());
 	size_=size;
 	direction_=dir;
 	map_.setX(map.getX());
 	map_.setY(map.getY());
+	obstacles_=obstacles;
+	speed_=speed;
 }
