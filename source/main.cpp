@@ -7,6 +7,7 @@
 #include "entities.h"
 #include "projectiles.h"
 #include "mainfunctions.h"
+#include "weapons.h"
 
 #include <vector>
 #include <string>
@@ -27,7 +28,11 @@ Mix_Chunk *bulletSound = NULL;
 SDL_Rect playerSlice[8];
 
 Player playerObject;
-std::vector<BaseProjectile*> bulletObjects;
+Weapon primary;
+Weapon secondary;
+Weapon melee;
+
+std::vector<BaseProjectile*> projectiles;
 std::vector<SDL_Rect> obstacles;
 
 bool init()
@@ -143,6 +148,9 @@ bool load_files()
 	Point temp2(map->w,map->h);
 	
 	playerObject.init(temp,playerSize,0,temp2,&obstacles,2);
+	primary.init(0,0,5,4,0,&projectiles);
+	secondary.init(1,0,2,2,0,&projectiles);
+	melee.init(2,0,1,1,0,&projectiles);
 
 	if(bulletSound==NULL)
 	{
@@ -169,10 +177,10 @@ void cleanup()
 	SDL_FreeSurface(map);
 	SDL_FreeSurface(player);
 	
-	for(std::vector<BaseProjectile*>::iterator it=bulletObjects.begin();it!=bulletObjects.end();)
+	for(std::vector<BaseProjectile*>::iterator it=projectiles.begin();it!=projectiles.end();)
 	{
 		delete *it;
-		bulletObjects.erase(it);
+		projectiles.erase(it);
 	}
 	Mix_FreeChunk(bulletSound);
 	TTF_CloseFont(font);
@@ -185,11 +193,13 @@ int main(int argc, char* args[])
 {
 	bool quit=false;
 	int moveDirection;
+	int currentWeapon=0;
+	bool fireSound=false;
 	Uint8 *keyStates=SDL_GetKeyState(NULL);
 	
 	Uint32 moveTimer = 0;
 	Uint32 fps = 0;
-	Uint32 shootTimer = 0;
+	Uint32 changeWeapon=0;
 		
 	if(init()==false)
 	{
@@ -208,6 +218,36 @@ int main(int argc, char* args[])
 			if(event.type==SDL_QUIT)
 			{
 				quit=true;
+			}
+			
+			if(event.type==SDL_KEYDOWN)
+			{
+				switch(event.key.keysym.sym)
+				{
+					case SDLK_1:
+						if(currentWeapon!=0)
+						{
+							changeWeapon=SDL_GetTicks();
+						}
+						currentWeapon=0;
+						break;
+						
+					case SDLK_2:
+						if(currentWeapon!=1)
+						{
+							changeWeapon=SDL_GetTicks();
+						}
+						currentWeapon=1;
+						break;
+						
+					case SDLK_3:
+						if(currentWeapon!=2)
+						{
+							changeWeapon=SDL_GetTicks();
+						}
+						currentWeapon=2;
+						break;
+				}
 			}
 		}
 		
@@ -258,24 +298,45 @@ int main(int argc, char* args[])
 				moveDirection=-1;
 			}
 		}
+		
 		if(keyStates[SDLK_ESCAPE])
 		{
 			quit=true;
 		}
-		if(SDL_GetTicks()-shootTimer>=250)
+		
+		if(keyStates[SDLK_SPACE])
 		{
-			if(keyStates[SDLK_SPACE])
+			Point temp(map->w,map->h);
+			if(currentWeapon==0)
 			{
-				shootTimer=SDL_GetTicks();
-				Point temp(map->w,map->h);
-				bulletObjects.push_back(new BaseProjectile(playerObject,0,temp,bullet->w,0,&obstacles,4));
+				if(SDL_GetTicks()-changeWeapon>=500)
+				{
+					fireSound=primary.fire(playerObject,temp,bullet->w,&obstacles);
+				}
+			}
+			else if(currentWeapon==1)
+			{
+				if(SDL_GetTicks()-changeWeapon>=500)
+				{
+					fireSound=secondary.fire(playerObject,temp,bullet->w,&obstacles);
+				}
+			}
+			else if(currentWeapon==2)
+			{
+				if(SDL_GetTicks()-changeWeapon>=500)
+				{
+					fireSound=melee.fire(playerObject,temp,bullet->w,&obstacles);
+				}
+			}
+			
+			if(fireSound==true)
+			{
 				if(Mix_PlayChannel(-1,bulletSound,0)==-1)
 				{
 					return 1;
 				}
-			}
+			}	
 		}
-			
 		SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0x00,0x00,0x00));
 		if(moveDirection!=-1)
 		{
@@ -284,13 +345,13 @@ int main(int argc, char* args[])
 		
 		apply_surface(((SCREEN_WIDTH/2)-((playerObject.getPosition()).getX())),((SCREEN_HEIGHT/2)-((playerObject.getPosition()).getY())),map,screen);
 		
-		for(std::vector<BaseProjectile*>::iterator it=bulletObjects.begin();it!=bulletObjects.end();it++)
+		for(std::vector<BaseProjectile*>::iterator it=projectiles.begin();it!=projectiles.end();it++)
 		{
 			apply_surface((((SCREEN_WIDTH/2)-((playerObject.getPosition().getX())-((*(*it)).getPosition().getX())))-((*(*it)).getSize()/2)),(((SCREEN_HEIGHT/2)-((playerObject.getPosition().getY())-((*(*it)).getPosition().getY())))-((*(*it)).getSize()/2)),bullet,screen);
 			if((*(*it)).hitScan()==true)
 			{
 				delete *it;
-				bulletObjects.erase(it);
+				projectiles.erase(it);
 				it--;
 			}
 		}
@@ -301,6 +362,7 @@ int main(int argc, char* args[])
 		{
 			return 1;
 		}
+		
 		if((SDL_GetTicks()-fps)<(1000/FRAMES_PER_SECOND))
 		{
 			SDL_Delay((1000/FRAMES_PER_SECOND)-(SDL_GetTicks()-fps));

@@ -18,7 +18,7 @@ bool BaseProjectile::hitScan() {
 			{
 				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
 				{
-					yVel=((*it).y+(*it).h+(size_/2))-y;
+					hit_=true;
 				}
 			}
 			if(yVel==0)
@@ -46,23 +46,10 @@ bool BaseProjectile::hitScan() {
 			{
 				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
 				{
-					if(y-(size_/2)!=(*it).y+(*it).h)
-					{
-						if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x))
-						{
-							xVel=((*it).x-(size_/2))-x;
-						}
-					}
-					else if(x+(size_/2)!=(*it).x)
-					{
-						if((y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-						{
-							yVel=((*it).y+(*it).h+(size_/2))-y;
-						}
-					}
+					hit_=true;
 				}
 			}
-			if((yVel==0)||(xVel==0))
+			if((xVel==0)||(yVel==0))
 			{
 				hit_=true;
 			}
@@ -83,7 +70,7 @@ bool BaseProjectile::hitScan() {
 			{
 				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
 				{
-					xVel=((*it).x-(size_/2))-x;
+					hit_=true;
 				}
 			}
 			if(xVel==0)
@@ -111,23 +98,10 @@ bool BaseProjectile::hitScan() {
 			{
 				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
 				{
-					if(y+(size_/2)!=(*it).y)
-					{
-						if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x))
-						{
-							xVel=((*it).x-(size_/2))-x;
-						}
-					}
-					else if(x+(size_/2)!=(*it).x)
-					{
-						if((y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-						{
-							yVel=((*it).y-(size_/2))-y;
-						}
-					}
+					hit_=true;
 				}
 			}
-			if((yVel==0)||(xVel==0))
+			if((xVel==0)||(yVel==0))
 			{
 				hit_=true;
 			}
@@ -148,7 +122,7 @@ bool BaseProjectile::hitScan() {
 			{
 				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
 				{
-					yVel=((*it).y-(size_/2))-y;
+					hit_=true;
 				}
 			}
 			if(yVel==0)
@@ -176,23 +150,10 @@ bool BaseProjectile::hitScan() {
 			{
 				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
 				{
-					if(y+(size_/2)!=(*it).y)
-					{
-						if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x))
-						{
-							xVel=((*it).x+(*it).w+(size_/2))-x;
-						}
-					}
-					else if(x-(size_/2)!=(*it).x+(*it).w)
-					{
-						if((y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-						{
-							yVel=((*it).y-(size_/2))-y;
-						}
-					}
+					hit_=true;
 				}
 			}
-			if((yVel==0)||(xVel==0))
+			if((xVel==0)||(yVel==0))
 			{
 				hit_=true;
 			}
@@ -213,7 +174,7 @@ bool BaseProjectile::hitScan() {
 			{
 				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
 				{
-					xVel=((*it).x+(*it).w+(size_/2))-x;
+					hit_=true;
 				}
 			}
 			if(xVel==0)
@@ -241,23 +202,10 @@ bool BaseProjectile::hitScan() {
 			{
 				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
 				{
-					if(y-(size_/2)!=(*it).y+(*it).h)
-					{
-						if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x))
-						{
-							xVel=((*it).x+(*it).w+(size_/2))-x;
-						}
-					}
-					else if(x-(size_/2)!=(*it).x+(*it).w)
-					{
-						if((y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-						{
-							yVel=((*it).y+(*it).h+(size_/2))-y;
-						}
-					}
+					hit_=true;
 				}
 			}
-			if((yVel==0)||(xVel==0))
+			if((xVel==0)||(yVel==0))
 			{
 				hit_=true;
 			}
