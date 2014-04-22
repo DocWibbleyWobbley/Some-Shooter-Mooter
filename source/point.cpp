@@ -16,3 +16,15 @@ void Point::setY(int y)
 {
 	y_=y;
 }
+
+bool Point::operator==(const Point p) const
+{
+	if((x_==p.getX())&&(y_==p.getY()))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

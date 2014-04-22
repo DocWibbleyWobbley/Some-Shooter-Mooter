@@ -14,6 +14,7 @@ class BaseProjectile {
 	int type_;
 	std::vector<SDL_Rect> *obstacles_;
 	int speed_;
+	std::vector<Enemy*> *enemies_;
 	
 public:
 	BaseProjectile()
@@ -25,10 +26,11 @@ public:
 	  size_(0),
 	  type_(0),
 	  obstacles_(NULL),
-	  speed_(4)
+	  speed_(4),
+	  enemies_(NULL)
 	{}
 	
-	BaseProjectile(Player p, int dmg = 0, Point map, int size, int type, std::vector<SDL_Rect> *obstacles, int speed)
+	BaseProjectile(Player p, int dmg = 0, Point map, int size, int type, std::vector<SDL_Rect> *obstacles, int speed, std::vector<Enemy*> *enemies)
 	: direction_(p.getDirection()),
 	  origin_(p.getPosition()),
 	  map_(map),
@@ -37,7 +39,8 @@ public:
 	  size_(size),
 	  type_(type),
 	  obstacles_(obstacles),
-	  speed_(speed)
+	  speed_(speed),
+	  enemies_(enemies)
 	{}
 	
 	bool hitScan();

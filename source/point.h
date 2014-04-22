@@ -16,6 +16,8 @@ public:
 	int getX() const;
 	void setX(int x);
 	void setY(int y);
+	
+	bool operator==(const Point p) const;
 };
 
 #endif

@@ -9,11 +9,11 @@ void Weapon::init(int type, int pType, int pSpeed, int rof, int dmg, std::vector
 	projectiles_ = projectiles;
 }
 
-bool Weapon::fire(Player player, Point map, int size, std::vector<SDL_Rect> *obstacles) {
+bool Weapon::fire(Player player, Point map, int size, std::vector<SDL_Rect> *obstacles, std::vector<Enemy*> *enemies) {
 	if((SDL_GetTicks()-rofTimer_)>=(1000/rof_))
 	{
 		rofTimer_=SDL_GetTicks();
-		(*projectiles_).push_back(new BaseProjectile(player, damage_, map, size, projectileType_, obstacles, projectileSpeed_));
+		(*projectiles_).push_back(new BaseProjectile(player, damage_, map, size, projectileType_, obstacles, projectileSpeed_, enemies));
 		return true;
 	}
 	return false;

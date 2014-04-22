@@ -29,6 +29,6 @@ public:
 	{}
 	
 	void init(int type, int pType, int pSpeed, int rof, int dmg, std::vector<BaseProjectile*> *projectiles);
-	bool fire(Player player, Point map, int size, std::vector<SDL_Rect> *obstacles);
+	bool fire(Player player, Point map, int size, std::vector<SDL_Rect> *obstacles, std::vector<Enemy*> *enemies);
 };
 #endif

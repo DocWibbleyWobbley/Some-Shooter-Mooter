@@ -14,21 +14,9 @@ bool BaseProjectile::hitScan() {
 			{
 				yVel=(size_/2)-y;
 			}
-			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
-			{
-				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-				{
-					hit_=true;
-				}
-			}
 			if(yVel==0)
 			{
 				hit_=true;
-			}
-			else
-			{
-				origin_.setX(x+xVel);
-				origin_.setY(y+yVel);
 			}
 			break;
 		case 1:
@@ -42,21 +30,9 @@ bool BaseProjectile::hitScan() {
 			{
 				xVel=(map_.getX()-(size_/2))-x;
 			}
-			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
-			{
-				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-				{
-					hit_=true;
-				}
-			}
 			if((xVel==0)||(yVel==0))
 			{
 				hit_=true;
-			}
-			else
-			{
-				origin_.setX(x+xVel);
-				origin_.setY(y+yVel);
 			}
 			break;
 		case 2:
@@ -66,21 +42,9 @@ bool BaseProjectile::hitScan() {
 			{
 				xVel=(map_.getX()-(size_/2))-x;
 			}
-			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
-			{
-				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-				{
-					hit_=true;
-				}
-			}
 			if(xVel==0)
 			{
 				hit_=true;
-			}
-			else
-			{
-				origin_.setX(x+xVel);
-				origin_.setY(y+yVel);
 			}
 			break;
 		case 3:
@@ -94,21 +58,9 @@ bool BaseProjectile::hitScan() {
 			{
 				xVel=(map_.getX()-(size_/2))-x;
 			}
-			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
-			{
-				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-				{
-					hit_=true;
-				}
-			}
 			if((xVel==0)||(yVel==0))
 			{
 				hit_=true;
-			}
-			else
-			{
-				origin_.setX(x+xVel);
-				origin_.setY(y+yVel);
 			}
 			break;
 		case 4:
@@ -118,21 +70,9 @@ bool BaseProjectile::hitScan() {
 			{
 				yVel=(map_.getY()-(size_/2))-y;
 			}
-			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
-			{
-				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-				{
-					hit_=true;
-				}
-			}
 			if(yVel==0)
 			{
 				hit_=true;
-			}
-			else
-			{
-				origin_.setX(x+xVel);
-				origin_.setY(y+yVel);
 			}
 			break;
 		case 5:
@@ -146,21 +86,9 @@ bool BaseProjectile::hitScan() {
 			{
 				yVel=(map_.getY()-(size_/2))-y;
 			}
-			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
-			{
-				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-				{
-					hit_=true;
-				}
-			}
 			if((xVel==0)||(yVel==0))
 			{
 				hit_=true;
-			}
-			else
-			{
-				origin_.setX(x+xVel);
-				origin_.setY(y+yVel);
 			}
 			break;
 		case 6:
@@ -170,21 +98,9 @@ bool BaseProjectile::hitScan() {
 			{
 				xVel=(size_/2)-x;
 			}
-			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
-			{
-				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-				{
-					hit_=true;
-				}
-			}
 			if(xVel==0)
 			{
 				hit_=true;
-			}
-			else
-			{
-				origin_.setX(x+xVel);
-				origin_.setY(y+yVel);
 			}
 			break;
 		case 7:
@@ -198,24 +114,38 @@ bool BaseProjectile::hitScan() {
 			{
 				yVel=(size_/2)-y;
 			}
-			for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
-			{
-				if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
-				{
-					hit_=true;
-				}
-			}
 			if((xVel==0)||(yVel==0))
 			{
 				hit_=true;
 			}
-			else
-			{
-				origin_.setX(x+xVel);
-				origin_.setY(y+yVel);
-			}
 			break;
 	}
+	
+	for(std::vector<SDL_Rect>::iterator it=(*obstacles_).begin();it!=(*obstacles_).end();it++)
+	{
+		if(hit_==true) break;
+		if((x+xVel-(size_/2)<(*it).x+(*it).w)&&(x+xVel+(size_/2)>(*it).x)&&(y+yVel-(size_/2)<(*it).y+(*it).h)&&(y+yVel+(size_/2)>(*it).y))
+		{
+			hit_=true;
+		}
+	}
+	
+	for(std::vector<Enemy*>::iterator it=(*enemies_).begin();it!=(*enemies_).end();it++)
+	{
+		if(hit_==true) break;
+		if((x+xVel-(size_/2)<(*(*it)).getPosition().getX()+(*(*it)).getSize()/2)&&(x+xVel+(size_/2)>(*(*it)).getPosition().getX()-(*(*it)).getSize()/2)&&(y+yVel-(size_/2)<(*(*it)).getPosition().getY()+(*(*it)).getSize()/2)&&(y+yVel+(size_/2)>(*(*it)).getPosition().getY()-(*(*it)).getSize()/2))
+		{
+			(*(*it)).hurt(damage_);
+			hit_=true;
+		}
+	}
+	
+	if(hit_!=true)
+	{
+		origin_.setX(x+xVel);
+		origin_.setY(y+yVel);
+	}
+	
 	return hit_;
 }
 
