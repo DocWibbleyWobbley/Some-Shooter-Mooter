@@ -115,7 +115,12 @@ int Enemy::findPlayer(int *xVel, int *yVel)
 	{
 		if((SDL_GetTicks()-hitTimer_)>=1000)
 		{
-			(*player_).hurt(damage_);
+			int tmpdmg=damage_;
+			for(std::vector<Item*>::iterator it=(*backpack_).begin();it!=(*backpack_).end();it++)
+			{
+				tmpdmg+=(*(*it)).eDamage_;
+			}
+			(*player_).hurt(tmpdmg);
 			hitTimer_=SDL_GetTicks();
 		}
 		*xVel=0;
@@ -123,11 +128,16 @@ int Enemy::findPlayer(int *xVel, int *yVel)
 	}
 	else
 	{
+	int tmpspd=speed_;
+	for(std::vector<Item*>::iterator it=(*backpack_).begin();it!=(*backpack_).end();it++)
+	{
+		tmpspd+=(*(*it)).eSpeed_;
+	}
 	switch(dir)
 	{
 		case 0:
 			*xVel=0;
-			*yVel=-speed_;
+			*yVel=-tmpspd;
 			
 			if((y+*yVel)<(size_/2))
 			{
@@ -157,8 +167,8 @@ int Enemy::findPlayer(int *xVel, int *yVel)
 			break;
 			
 		case 1:
-			*xVel=speed_/2;
-			*yVel=-speed_/2;
+			*xVel=tmpspd/2;
+			*yVel=-tmpspd/2;
 			
 			if((y+*yVel)<(size_/2))
 			{
@@ -207,7 +217,7 @@ int Enemy::findPlayer(int *xVel, int *yVel)
 			break;
 			
 		case 2:
-			*xVel=speed_;
+			*xVel=tmpspd;
 			*yVel=0;
 			
 			if((x+*xVel)>(map_.getX()-(size_/2)))
@@ -238,8 +248,8 @@ int Enemy::findPlayer(int *xVel, int *yVel)
 			break;
 			
 		case 3:
-			*xVel=speed_/2;
-			*yVel=speed_/2;
+			*xVel=tmpspd/2;
+			*yVel=tmpspd/2;
 			
 			if((y+*yVel)>(map_.getY()-(size_/2)))
 			{
@@ -289,7 +299,7 @@ int Enemy::findPlayer(int *xVel, int *yVel)
 			
 		case 4:
 			*xVel=0;
-			*yVel=speed_;
+			*yVel=tmpspd;
 			
 			if((y+*yVel)>(map_.getY()-(size_/2)))
 			{
@@ -319,8 +329,8 @@ int Enemy::findPlayer(int *xVel, int *yVel)
 			break;
 			
 		case 5:
-			*xVel=-speed_/2;
-			*yVel=speed_/2;
+			*xVel=-tmpspd/2;
+			*yVel=tmpspd/2;
 			
 			if((x+*xVel)<(size_/2))
 			{
@@ -370,7 +380,7 @@ int Enemy::findPlayer(int *xVel, int *yVel)
 			break;
 			
 		case 6:
-			*xVel=-speed_;
+			*xVel=-tmpspd;
 			*yVel=0;
 			
 			if((x+*xVel)<(size_/2))
@@ -401,8 +411,8 @@ int Enemy::findPlayer(int *xVel, int *yVel)
 			break;
 			
 		case 7:
-			*xVel=-speed_/2;
-			*yVel=-speed_/2;
+			*xVel=-tmpspd/2;
+			*yVel=-tmpspd/2;
 			
 			if((x+*xVel)<(size_/2))
 			{

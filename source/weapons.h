@@ -4,6 +4,8 @@
 #include "point.h"
 #include "projectiles.h"
 #include "entities.h"
+#include "items.h"
+
 #include "SDL/SDL.h"
 
 #include <vector>
@@ -15,6 +17,7 @@ class Weapon {
 	int rof_;
 	int damage_;
 	std::vector<BaseProjectile*> *projectiles_;
+	std::vector<Item*> *backpack_;
 	Uint32 rofTimer_;
 	
 public:
@@ -25,10 +28,11 @@ public:
 	  rof_(4),
 	  damage_(0),
 	  projectiles_(NULL),
+	  backpack_(NULL),
 	  rofTimer_(0)
 	{}
 	
-	void init(int type, int pType, int pSpeed, int rof, int dmg, std::vector<BaseProjectile*> *projectiles);
+	void init(int type, int pType, int pSpeed, int rof, int dmg, std::vector<BaseProjectile*> *projectiles, std::vector<Item*> *backpack);
 	bool fire(Player player, Point map, int size, std::vector<SDL_Rect> *obstacles, std::vector<Enemy*> *enemies);
 };
 #endif

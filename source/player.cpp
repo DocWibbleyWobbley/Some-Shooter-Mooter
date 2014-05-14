@@ -4,11 +4,16 @@ void Player::checkDirection(int dir, int *xVel, int *yVel) const
 {
 	int x=origin_.getX();
 	int y=origin_.getY();
+	int tmpspd=speed_;
+	for(std::vector<Item*>::iterator it=(*backpack_).begin();it!=(*backpack_).end();it++)
+	{
+		tmpspd+=(*(*it)).pSpeed_;
+	}
 	switch(dir)
 	{
 		case 0:
 			*xVel=0;
-			*yVel=-speed_;
+			*yVel=-tmpspd;
 			
 			if((y+*yVel)<(size_/2))
 			{
@@ -33,8 +38,8 @@ void Player::checkDirection(int dir, int *xVel, int *yVel) const
 			break;
 			
 		case 1:
-			*xVel=speed_/2;
-			*yVel=-speed_/2;
+			*xVel=tmpspd/2;
+			*yVel=-tmpspd/2;
 			
 			if((y+*yVel)<(size_/2))
 			{
@@ -78,7 +83,7 @@ void Player::checkDirection(int dir, int *xVel, int *yVel) const
 			break;
 			
 		case 2:
-			*xVel=speed_;
+			*xVel=tmpspd;
 			*yVel=0;
 			
 			if((x+*xVel)>(map_.getX()-(size_/2)))
@@ -104,8 +109,8 @@ void Player::checkDirection(int dir, int *xVel, int *yVel) const
 			break;
 			
 		case 3:
-			*xVel=speed_/2;
-			*yVel=speed_/2;
+			*xVel=tmpspd/2;
+			*yVel=tmpspd/2;
 			
 			if((y+*yVel)>(map_.getY()-(size_/2)))
 			{
@@ -150,7 +155,7 @@ void Player::checkDirection(int dir, int *xVel, int *yVel) const
 			
 		case 4:
 			*xVel=0;
-			*yVel=speed_;
+			*yVel=tmpspd;
 			
 			if((y+*yVel)>(map_.getY()-(size_/2)))
 			{
@@ -175,8 +180,8 @@ void Player::checkDirection(int dir, int *xVel, int *yVel) const
 			break;
 			
 		case 5:
-			*xVel=-speed_/2;
-			*yVel=speed_/2;
+			*xVel=-tmpspd/2;
+			*yVel=tmpspd/2;
 			
 			if((x+*xVel)<(size_/2))
 			{
@@ -221,7 +226,7 @@ void Player::checkDirection(int dir, int *xVel, int *yVel) const
 			break;
 			
 		case 6:
-			*xVel=-speed_;
+			*xVel=-tmpspd;
 			*yVel=0;
 			
 			if((x+*xVel)<(size_/2))
@@ -247,8 +252,8 @@ void Player::checkDirection(int dir, int *xVel, int *yVel) const
 			break;
 			
 		case 7:
-			*xVel=-speed_/2;
-			*yVel=-speed_/2;
+			*xVel=-tmpspd/2;
+			*yVel=-tmpspd/2;
 			
 			if((x+*xVel)<(size_/2))
 			{
@@ -313,7 +318,7 @@ int Player::getDirection() const
 	return direction_;
 }
 
-void Player::init(Point origin, int size, int dir, Point map, std::vector<SDL_Rect> *obstacles, int speed, int health, int maxHealth, std::vector<Enemy*> *enemies)
+void Player::init(Point origin, int size, int dir, Point map, std::vector<SDL_Rect> *obstacles, int speed, int health, int maxHealth, std::vector<Enemy*> *enemies, std::vector<Item*> *backpack, int money)
 {
 	origin_.setX(origin.getX());
 	origin_.setY(origin.getY());
@@ -326,6 +331,8 @@ void Player::init(Point origin, int size, int dir, Point map, std::vector<SDL_Re
 	health_=health;
 	maxHealth_=maxHealth;
 	enemies_=enemies;
+	backpack_=backpack;
+	money_=money;
 }
 
 void Player::hurt(int val)
@@ -354,4 +361,35 @@ int Player::getHealth()
 int Player::getSize()
 {
 	return size_;
+}
+
+int Player::getMoney()
+{
+	return money_;
+}
+
+void Player::transaction(int money)
+{
+	money_+=money;
+}
+
+int Player::getMaxHealth()
+{
+	return maxHealth_;
+}
+
+void Player::modifyMaxHealth(int modifier)
+{
+	maxHealth_+=modifier;
+	if(modifier>0)
+	{
+		health_+=modifier;
+	}
+	else
+	{
+		if(health_>modifier)
+		{
+			health_+=modifier;
+		}
+	}
 }
