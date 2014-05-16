@@ -83,7 +83,7 @@ public:
 	  damage_(damage),
 	  tolerance_(0)
 	{
-		tolerance_=(size_+(*player_).getSize())*2;
+		tolerance_=(size_+(*player_).getSize())*5/8;
 	}
 	
 	void move();
